@@ -190,6 +190,13 @@ SELECT MIN(temp),MAX(temp)
 FROM ncdc_staging_formonth;
 
 
+WITH cte as
+(SELECT MAX(temp) as mx,MIN(temp) as mn FROM ncdc_staging_formonth
+WHERE quality IN(0,1,2,4,5,9) AND temp !=9999)
+SELECT n.mont,n.temp FROM ncdc_staging_formonth as n 
+JOIN cte AS c n.temp = c.mx OR n.temp = c.mn       e;
+
+
 6. Create a table movie_staging and load data from movies_caret.csv.
    - Hint: TBLPROPERTIES ('skip.header.line.count'='1')
    - Treat `genres` as ARRAY.
